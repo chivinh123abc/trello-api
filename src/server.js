@@ -1,30 +1,28 @@
 /* eslint-disable no-console */
 import express from 'express'
 import exitHook from 'async-exit-hook'
-import { CONNECT_DB, GET_DB, CLOSE_DB } from '~/config/mongodb'
+import { CONNECT_DB, CLOSE_DB } from '~/config/mongodb'
+import { env } from '~/config/environment'
 
 
 const START_SERVER = () => {
   const app = express()
 
-  const hostname = 'localhost'
-  const port = 8017
-
   app.get('/', async (req, res) => {
-    console.log(await GET_DB().listCollections().toArray())
-    // process.exit(0)
+    console.log(process.env)
     res.end('<h1>Hello World!</h1><hr>')
   })
 
-  app.listen(port, hostname, () => {
-    console.log(`3. Hello RyanLuong, I am running at http://${hostname}:${port}/`)
+  app.listen(env.APP_PORT, env.APP_HOST, () => {
+    console.log(`3. Hello ${env.AUTHOR}, I am running at http://${env.APP_HOST}:${env.APP_PORT}/`)
   })
 
   //Thuc hien cac tac vu khi cleanup truoc khi dung server
   //https://stackoverflow.com/questions/14031763/doing-a-cleanup-action-just-before-node-js-exits
   exitHook(() => {
-    console.log('4. Disconnecting from mongoDB Cloud Atlas')
+    console.log('4. Server is shutting down....')
     CLOSE_DB()
+    console.log('5. Disconnected from mongoDB Cloud Atlas')
   })
 }
 
@@ -50,4 +48,3 @@ const START_SERVER = () => {
 //     console.error(error)
 //     process.exit(0)
 //   })
-// Dong nay la note
