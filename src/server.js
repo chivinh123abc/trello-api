@@ -9,10 +9,13 @@ import { APIs_V1 } from '~/routes/v1'
 const START_SERVER = () => {
   const app = express()
 
+  //Enable  req.body  json data
+  app.use(express.json())
+  //Use APIs v1
   app.use('/v1', APIs_V1)
 
   app.listen(env.APP_PORT, env.APP_HOST, () => {
-    console.log(`3. Hello ${env.AUTHOR}, I am running at http://${env.APP_HOST}:${env.APP_PORT}/`)
+    console.log(`3. Hello ${env.AUTHOR}, I am running at http://${env.APP_HOST}:${env.APP_PORT}/v1/`)
   })
 
   //Thuc hien cac tac vu khi cleanup truoc khi dung server
