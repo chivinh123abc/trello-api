@@ -1,5 +1,5 @@
 import { StatusCodes } from 'http-status-codes'
-import ApiError from '~/utils/ApiError'
+import { boardService } from '~/services/boardService'
 
 const createNew = async (req, res, next) => {
   try {
@@ -10,9 +10,11 @@ const createNew = async (req, res, next) => {
     // console.log('req.cookies: ', req.cookies)
     // console.log('req.jwtDecoded: ', req.jwtDecoded)
 
-    // Điều  hướng data  sang tầng Service
+    // Điều  hướng data sang tầng Service
+    const createdBoard = await boardService.createNew(req.body)
+
     //có kết quả thì trả về phia Client
-    res.status(StatusCodes.CREATED).json({ message: 'POST from controller: APIs Create new boards' })
+    res.status(StatusCodes.CREATED).json(createdBoard)
   } catch (error) {
     next(error)
   }
