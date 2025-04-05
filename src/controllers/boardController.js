@@ -11,7 +11,6 @@ const createNew = async (req, res, next) => {
     // console.log('req.jwtDecoded: ', req.jwtDecoded)
 
     // Điều  hướng data  sang tầng Service
-    // throw new ApiError(StatusCodes.BAD_GATEWAY, 'Loi to r')
     //có kết quả thì trả về phia Client
     res.status(StatusCodes.CREATED).json({ message: 'POST from controller: APIs Create new boards' })
   } catch (error) {
