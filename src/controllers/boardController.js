@@ -20,6 +20,20 @@ const createNew = async (req, res, next) => {
   }
 }
 
+const getDetails = async (req, res, next) => {
+  try {
+    // console.log('req.params: ', req.params)
+    const boardId = req.params.id
+    //Dau  nay  o khoa MERN Advance nang cao hoc truc tiep se co them userId nx de chi lay board thuocve user do thoi
+    const board = await boardService.getDetails(boardId)
+
+    res.status(StatusCodes.OK).json(board)
+  } catch (error) {
+    next(error)
+  }
+}
+
 export const boardController = {
-  createNew
+  createNew,
+  getDetails
 }
