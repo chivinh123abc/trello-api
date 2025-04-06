@@ -3,3 +3,8 @@ export const WHITELIST_DOMAINS = [
   'http://localhost:5173'
   //vi du sau nay  se deploy len  domain chinh thuc
 ]
+
+export const BOARD_TYPES = {
+  PUBLIC: 'public',
+  PRIVATE: 'private'
+}
