@@ -3,6 +3,7 @@ import { slugify } from '~/utils/formatters'
 import { boardModel } from '~/models/boardModel'
 import ApiError from '~/utils/ApiError'
 import { StatusCodes } from 'http-status-codes'
+import { cloneDeep } from 'lodash'
 
 const createNew = async (reqBody) => {
   // eslint-disable-next-line no-useless-catch
@@ -35,7 +36,23 @@ const getDetails = async (boardID) => {
     if (!board) {
       throw new ApiError(StatusCodes.NOT_FOUND, 'Board not found')
     }
-    return board
+
+    //https://www.javascripttutorial.net/javascript-primitive-vs-reference-values/
+    const resBoard = cloneDeep(board)
+    //Dua card ve dung columns cua no
+    resBoard.columns.forEach(column => {
+      column.cards = resBoard.cards.filter(card => {
+        return card.columnId.toString() === column._id.toString()
+      })
+      // //Cach dung .equals la boi vi ObjectID trong MongoDB co support method equals
+      // column.cards = resBoard.cards.filter(card => {
+      //   return card.columnId.equals(column._id)
+      // })
+    })
+    //Xoa cards
+    delete resBoard.cards
+
+    return resBoard
   } catch (error) {
     throw error
   }
