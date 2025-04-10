@@ -1,6 +1,6 @@
 // board
 import Joi from 'joi'
-import { ObjectId } from 'mongodb'
+import { ObjectId, ReturnDocument } from 'mongodb'
 import { GET_DB } from '~/config/mongodb'
 import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from '~/utils/validators'
 import { BOARD_TYPES } from '~/utils/constants'
@@ -92,10 +92,25 @@ const getDetails = async (id) => {
   }
 }
 
+//Nhiem vu cua function nay la push 1 gia tri column Ids vao cuoi mang ColumnOrderIds
+const pushColumnOrderIds = async (column) => {
+  try {
+    const res = await GET_DB().collection(BOARD_COLLECTION_NAME).findOneAndUpdate(
+      { _id: new ObjectId(String(column.boardId)) },
+      { $push: { columnOrderIds: new ObjectId(String(column._id)) } },
+      { returnDocument: 'after' }
+    )
+    return res.value
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
 export const boardModel = {
   BOARD_COLLECTION_NAME,
   BOARD_COLLECTION_SCHEMA,
   createNew,
   findOneById,
-  getDetails
+  getDetails,
+  pushColumnOrderIds
 }
