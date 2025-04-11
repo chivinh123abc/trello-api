@@ -78,9 +78,8 @@ const update = async (columnId, updateData) => {
       }
     })
     // Doi voi nhung du lieu lien quan ObjectId, bien doi o day
-    //
     if (updateData.cardOrderIds) {
-      updateData.cardOrderIds = updateData.cardOrderIds.map(_id => (new ObjectId(_id)))
+      updateData.cardOrderIds = updateData.cardOrderIds.map(_id => (new ObjectId(String(_id))))
     }
 
     const res = await GET_DB().collection(COLUMN_COLLECTION_NAME).findOneAndUpdate(
