@@ -116,7 +116,10 @@ const update = async (boardId, updateData) => {
         delete updateData[fieldName]
       }
     })
-    // console.log(updateData)
+    // Doi voi nhung du lieu lien quan ObjectId, bien doi o day
+    if (updateData.columnOrderIds) {
+      updateData.columnOrderIds = updateData.columnOrderIds.map(_id => (new ObjectId(String(_id))))
+    }
 
     const res = await GET_DB().collection(BOARD_COLLECTION_NAME).findOneAndUpdate(
       { _id: new ObjectId(String(boardId)) },
