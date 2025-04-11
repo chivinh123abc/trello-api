@@ -36,10 +36,20 @@ const getDetails = async (req, res, next) => {
 const update = async (req, res, next) => {
   try {
     const boardId = req.params.id
-
     const updatedBoard = await boardService.update(boardId, req.body)
 
     res.status(StatusCodes.OK).json(updatedBoard)
+  } catch (error) {
+    next(error)
+  }
+}
+const moveCardInDifferentColumn = async (req, res, next) => {
+  try {
+    // console.log('MoveCard:  ', result)
+    // console.log('MoveCard:  ', req.body)
+    const result = await boardService.moveCardInDifferentColumn(req.body)
+
+    res.status(StatusCodes.OK).json(result)
   } catch (error) {
     next(error)
   }
@@ -48,5 +58,6 @@ const update = async (req, res, next) => {
 export const boardController = {
   createNew,
   getDetails,
-  update
+  update,
+  moveCardInDifferentColumn
 }
