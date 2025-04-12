@@ -40,12 +40,12 @@ const createNew = async (data) => {
   }
 }
 
-const findOneById = async (id) => {
+const findOneById = async (cardId) => {
   try {
     // console.log(id)
     const result = await GET_DB().collection(CARD_COLLECTION_NAME).findOne({
       // _id: new ObjectId(id) => fix loi deprecated
-      _id: new ObjectId(String(id))
+      _id: new ObjectId(String(cardId))
     })
     // console.log(result)
     return result
@@ -76,11 +76,23 @@ const update = async (cardId, updateData) => {
   }
 }
 
+const deleteManyByColumnId = async (columnId) => {
+  try {
+    const result = await GET_DB().collection(CARD_COLLECTION_NAME).deleteMany({
+      columnId: new ObjectId(String(columnId))
+    })
+    return result
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
 
 export const cardModel = {
   CARD_COLLECTION_NAME,
   CARD_COLLECTION_SCHEMA,
   createNew,
   findOneById,
-  update
+  update,
+  deleteManyByColumnId
 }

@@ -46,12 +46,12 @@ const createNew = async (data) => {
   }
 }
 
-const findOneById = async (id) => {
+const findOneById = async (boardId) => {
   try {
     // console.log(id)
     const result = await GET_DB().collection(BOARD_COLLECTION_NAME).findOne({
       // _id: new ObjectId(id) => fix loi deprecated
-      _id: new ObjectId(String(id))
+      _id: new ObjectId(String(boardId))
     })
     // console.log(result)
     return result
@@ -61,12 +61,12 @@ const findOneById = async (id) => {
 }
 
 //Query thong hop (aggregate) de lay toan bo Columns va Cards thuoc ve Board
-const getDetails = async (id) => {
+const getDetails = async (boardId) => {
   try {
     const result = await GET_DB().collection(BOARD_COLLECTION_NAME).aggregate([
       {
         $match: {
-          _id: new ObjectId(String(id)),
+          _id: new ObjectId(String(boardId)),
           _destroy: false
         }
       },
@@ -108,6 +108,21 @@ const pushColumnOrderIds = async (column) => {
     throw new Error(error)
   }
 }
+// Lay 1 phan tu columnId  ra khoi mang columnOrderIds
+// Dung $pull trong mongodb de lay 1 phan tu ra khoi mang r xoa no di
+const pullColumnOrderIds = async (column) => {
+  try {
+    const res = await GET_DB().collection(BOARD_COLLECTION_NAME).findOneAndUpdate(
+      { _id: new ObjectId(String(column.boardId)) },
+      { $pull: { columnOrderIds: new ObjectId(String(column._id)) } },
+      { returnDocument: 'after' }
+    )
+    return res
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
 const update = async (boardId, updateData) => {
   try {
     //loc cac field khong cho phep cap nhat linh tink
@@ -139,5 +154,6 @@ export const boardModel = {
   findOneById,
   getDetails,
   pushColumnOrderIds,
-  update
+  update,
+  pullColumnOrderIds
 }
