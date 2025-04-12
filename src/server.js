@@ -22,9 +22,15 @@ const START_SERVER = () => {
   //Middleware xu ly loi tap trung
   app.use(errorHandlingMiddleware)
 
-  app.listen(env.APP_PORT, env.APP_HOST, () => {
-    console.log(`3. Hello ${env.AUTHOR}, I am running at http://${env.APP_HOST}:${env.APP_PORT}/v1/`)
-  })
+  if (env.BUILD_MODE === 'production') {
+    app.listen(process.env.PORT, () => {
+      console.log(`3. Production: ${env.AUTHOR}, I am running at Port:  ${process.env.PORT}`)
+    })
+  } else {
+    app.listen(env.LOCAL_DEV_APP_PORT, env.LOCAL_DEV_APP_HOST, () => {
+      console.log(`3. Local Dev: ${env.AUTHOR}, I am running at http://${env.LOCAL_DEV_APP_HOST}:${env.LOCAL_DEV_APP_PORT}/v1/`)
+    })
+  }
 
   //Thuc hien cac tac vu khi cleanup truoc khi dung server
   //https://stackoverflow.com/questions/14031763/doing-a-cleanup-action-just-before-node-js-exits
