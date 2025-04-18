@@ -7,10 +7,21 @@ import { CONNECT_DB, CLOSE_DB } from '~/config/mongodb'
 import { env } from '~/config/environment'
 import { APIs_V1 } from '~/routes/v1'
 import { errorHandlingMiddleware } from './middlewares/errorHandlingMiddleware'
+import cookieParser from 'cookie-parser'
 
 
 const START_SERVER = () => {
   const app = express()
+
+  // Fix lỗi Cache from disk của expressJs
+  // https://stackoverflow.com/a/53240717/8324172
+  app.use((req, res, next) => {
+    res.set('Cache-Control', 'no-store')
+    next()
+  })
+
+  // Cau hinh cookieParser
+  app.use(cookieParser())
 
   // Xu ly CORS
   app.use(cors(corsOptions))
