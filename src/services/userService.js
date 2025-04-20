@@ -160,7 +160,6 @@ const update = async (userId, reqBody) => {
     } else {
       // Update General Infomation, Ex: DisplayName
       updatedUser = await userModel.update(existUser._id, reqBody)
-      console.log('seccond', updatedUser)
     }
     return pickUser(updatedUser)
 
