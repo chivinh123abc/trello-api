@@ -70,7 +70,7 @@ const update = async (userId, updatedData) => {
     const result = await GET_DB().collection(USER_COLLECTION_NAME).findOneAndUpdate(
       { _id: new ObjectId(String(userId)) },
       { $set: updatedData },
-      { ReturnDocument: 'after' }
+      { returnDocument: 'after' }
     )
     return result
   } catch (error) {
