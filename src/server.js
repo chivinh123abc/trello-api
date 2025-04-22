@@ -26,8 +26,9 @@ const START_SERVER = () => {
   // Xu ly CORS
   app.use(cors(corsOptions))
 
-  //Enable  req.body  json data
+  //Enable req.body json data
   app.use(express.json())
+
   //Use APIs v1
   app.use('/v1', APIs_V1)
   //Middleware xu ly loi tap trung
