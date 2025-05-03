@@ -48,8 +48,20 @@ const moveCardInDifferentColumn = async (req, res, next) => {
     // console.log('MoveCard:  ', result)
     // console.log('MoveCard:  ', req.body)
     const result = await boardService.moveCardInDifferentColumn(req.body)
-
     res.status(StatusCodes.OK).json(result)
+  } catch (error) {
+    next(error)
+  }
+}
+
+const getBoards = async (req, res, next) => {
+  try {
+    const userId = req.jwtDecoded._id
+    // page va itemsPerPage duoc truyenvao trong query url tu phia FE nen BE se lay thong qua req.query
+    const { page, itemPerPage } = req.query
+    const results = await boardService.getBoards(userId, page, itemPerPage)
+
+    res.status(StatusCodes.OK).json(results)
   } catch (error) {
     next(error)
   }
@@ -59,5 +71,6 @@ export const boardController = {
   createNew,
   getDetails,
   update,
-  moveCardInDifferentColumn
+  moveCardInDifferentColumn,
+  getBoards
 }
