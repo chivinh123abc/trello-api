@@ -8,7 +8,7 @@ import { cloneDeep } from 'lodash'
 import { columnModel } from '~/models/columnModel'
 import { DEFAULT_ITEMS_PER_PAGE, DEFAULT_PAGE } from '~/utils/constants'
 
-const createNew = async (reqBody) => {
+const createNew = async (userId, reqBody) => {
   // eslint-disable-next-line no-useless-catch
   try {
     //  Xử lý logic dữ liệu tùy đặc thù dự án
@@ -17,9 +17,9 @@ const createNew = async (reqBody) => {
       slug: slugify(reqBody.title)
     }
     // gọi tới tầng model để xử lý bản ghi newBoard vào trong Database
-    const createdBoard = await boardModel.createNew(newBoard)
+    const createdBoard = await boardModel.createNew(userId, newBoard)
 
-    //Lay ban ghi  board sau khi goi (tuy muc dich du an ma co  can  buoc nay hay k)
+    //Lay ban ghi board sau khi goi (tuy muc dich du an ma co can  buoc nay hay k)
     const getNewBoard = await boardModel.findOneById(createdBoard.insertedId)
     // console.log(getNewBoard)
 
@@ -32,10 +32,10 @@ const createNew = async (reqBody) => {
     throw error
   }
 }
-const getDetails = async (boardID) => {
+const getDetails = async (userId, boardID) => {
   // eslint-disable-next-line no-useless-catch
   try {
-    const board = await boardModel.getDetails(boardID)
+    const board = await boardModel.getDetails(userId, boardID)
     if (!board) {
       throw new ApiError(StatusCodes.NOT_FOUND, 'Board not found')
     }
