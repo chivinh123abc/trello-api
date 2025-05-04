@@ -1,5 +1,5 @@
 // board
-import Joi from 'joi'
+import Joi, { valid } from 'joi'
 import { ObjectId } from 'mongodb'
 import { GET_DB } from '~/config/mongodb'
 import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from '~/utils/validators'
@@ -42,11 +42,17 @@ const validateBeforeCreate = async (data) => {
   return await BOARD_COLLECTION_SCHEMA.validateAsync(data, { abortEarly: false })
 }
 
-const createNew = async (data) => {
+const createNew = async (userId, data) => {
   try {
     const validData = await validateBeforeCreate(data)
+
+    const newBoardToAdd = {
+      ...validData,
+      ownerIds: [new ObjectId(String(userId))]
+    }
+
     // console.log(validData)
-    const createdBoard = await GET_DB().collection(BOARD_COLLECTION_NAME).insertOne(validData)
+    const createdBoard = await GET_DB().collection(BOARD_COLLECTION_NAME).insertOne(newBoardToAdd)
     // console.log(createdBoard)
     return createdBoard
     // return await GET_DB().collection(BOARD_COLLECTION_NAME).insertOne(data)
@@ -70,14 +76,23 @@ const findOneById = async (boardId) => {
 }
 
 //Query thong hop (aggregate) de lay toan bo Columns va Cards thuoc ve Board
-const getDetails = async (boardId) => {
+const getDetails = async (userId, boardId) => {
   try {
+    // const result = await GET_DB().collection(BOARD_COLLECTION_NAME).findOne({_id: new ObjectId(String(boardId))})
+    const queryConditions = [
+      { _id: new ObjectId(String(boardId)) },
+      { _destroy: false },
+      {
+        $or: [
+          { ownerIds: { $all: [new ObjectId(String(userId))] } },
+          { memberIds: { $all: [new ObjectId(String(userId))] } }
+        ]
+      }
+    ]
+
     const result = await GET_DB().collection(BOARD_COLLECTION_NAME).aggregate([
       {
-        $match: {
-          _id: new ObjectId(String(boardId)),
-          _destroy: false
-        }
+        $match: { $and: queryConditions }
       },
       {
         $lookup: {

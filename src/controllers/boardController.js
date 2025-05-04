@@ -9,9 +9,9 @@ const createNew = async (req, res, next) => {
     // console.log('req.files: ', req.files)
     // console.log('req.cookies: ', req.cookies)
     // console.log('req.jwtDecoded: ', req.jwtDecoded)
-
+    const userId = req.jwtDecoded._id
     // Điều  hướng data sang tầng Service
-    const createdBoard = await boardService.createNew(req.body)
+    const createdBoard = await boardService.createNew(userId, req.body)
 
     //có kết quả thì trả về phia Client
     res.status(StatusCodes.CREATED).json(createdBoard)
@@ -23,9 +23,10 @@ const createNew = async (req, res, next) => {
 const getDetails = async (req, res, next) => {
   try {
     // console.log('req.params: ', req.params)
+    const userId = req.jwtDecoded._id
     const boardId = req.params.id
     //Dau  nay  o khoa MERN Advance nang cao hoc truc tiep se co them userId nx de chi lay board thuocve user do thoi
-    const board = await boardService.getDetails(boardId)
+    const board = await boardService.getDetails(userId, boardId)
 
     res.status(StatusCodes.OK).json(board)
   } catch (error) {
