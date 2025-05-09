@@ -3,7 +3,7 @@ import multer from 'multer'
 import ApiError from '~/utils/ApiError'
 import { ALLOW_COMMON_FILE_TYPES, LIMIT_COMMON_FILE_SIZE } from '~/utils/validators'
 
-/** Hầu hết nội dung đều có ở docs của multer, chỉ là anh tổ chức lại sao cho khoa học và gọn gàng nhất có thể
+/** Hầu hết nội dung đều có ở docs của multer, chỉ là tổ chức lại sao cho khoa học và gọn gàng nhất có thể
 * https://www.npmjs.com/package/multer
 */
 

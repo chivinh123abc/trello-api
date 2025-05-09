@@ -3,7 +3,10 @@ import { env } from '~/config/environment'
 //Nhung domain dc truy cap den tai nguyen cua server
 export const WHITELIST_DOMAINS = [
   // 'http://localhost:5173'
-  'https://trello-web-jade.vercel.app'
+  'https://trello-web-jade.vercel.app',
+  'https://trello-web-ryanluongs-projects.vercel.app/',
+  'trello-d7bjos95j-ryanluongs-projects.vercel.app',
+
   //vi du sau nay  se deploy len  domain chinh thuc
 ]
 

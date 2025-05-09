@@ -7,6 +7,7 @@ import { BOARD_TYPES } from '~/utils/constants'
 import { columnModel } from '~/models/columnModel'
 import { cardModel } from '~/models/cardModel'
 import { pagingSkipValue } from '~/utils/algorithms'
+import { userModel } from './userModel'
 
 // Define Collection (name & schema)
 const BOARD_COLLECTION_NAME = 'boards'
@@ -26,7 +27,7 @@ const BOARD_COLLECTION_SCHEMA = Joi.object({
     Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
   ).default([]),
   //board members
-  memberOrderIds: Joi.array().items(
+  memberIds: Joi.array().items(
     Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
   ).default([]),
 
@@ -108,6 +109,25 @@ const getDetails = async (userId, boardId) => {
           localField: '_id',
           foreignField: 'boardId',
           as: 'cards'
+        }
+      },
+      {
+        $lookup: {
+          from: userModel.USER_COLLECTION_NAME,
+          localField: 'ownerIds',
+          foreignField: '_id',
+          as: 'owners',
+          // pipline trong lookup xu ly hoac nhieu luong can thiet
+          // $project de chi dinh cac field k muon lay = 0
+          pipeline: [{ $project: { 'password': 0, 'verifyToken': 0 } }]
+        }
+      }, {
+        $lookup: {
+          from: userModel.USER_COLLECTION_NAME,
+          localField: 'memberIds',
+          foreignField: '_id',
+          as: 'members',
+          pipeline: [{ $project: { 'password': 0, 'verifyToken': 0 } }]
         }
       }
     ]).toArray()
