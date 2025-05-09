@@ -22,7 +22,7 @@ const createNew = async (reqBody) => {
     throw error
   }
 }
-const update = async (cardId, reqBody, cardCoverFile) => {
+const update = async (cardId, reqBody, cardCoverFile, userInfo) => {
   try {
     const updateData = {
       ...reqBody,
@@ -37,6 +37,16 @@ const update = async (cardId, reqBody, cardCoverFile) => {
       updatedCard = await cardModel.update(cardId, {
         cover: uploadResult.secure_url
       })
+    } else if (updateData.commentToAdd) {
+      // Tao du lieu comment de them vao Database, can bo sung nhung field can thiet
+      const commentData = {
+        ...updateData.commentToAdd,
+        commentedAt: Date.now(),
+        userId: userInfo._id,
+        userEmail: userInfo.email
+      }
+      updatedCard = await cardModel.unshiftNewComment(cardId, commentData)
+      // console.log(updatedCard)
     } else {
       // Cac truong hop update chung
       updatedCard = await cardModel.update(cardId, updateData)
