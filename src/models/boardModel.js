@@ -152,6 +152,19 @@ const pushColumnOrderIds = async (column) => {
     throw new Error(error)
   }
 }
+
+const pushMembers = async (boardId, userId) => {
+  try {
+    const res = await GET_DB().collection(BOARD_COLLECTION_NAME).findOneAndUpdate(
+      { _id: new ObjectId(String(boardId)) },
+      { $push: { memberIds: new ObjectId(String(userId)) } },
+      { returnDocument: 'after' }
+    )
+    return res
+  } catch (error) {
+    throw new Error(error)
+  }
+}
 // Lay 1 phan tu columnId  ra khoi mang columnOrderIds
 // Dung $pull trong mongodb de lay 1 phan tu ra khoi mang r xoa no di
 const pullColumnOrderIds = async (column) => {
@@ -252,5 +265,6 @@ export const boardModel = {
   pushColumnOrderIds,
   update,
   pullColumnOrderIds,
-  getBoards
+  getBoards,
+  pushMembers
 }
