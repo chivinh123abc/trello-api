@@ -68,11 +68,11 @@ const findOneById = async (invitationId) => {
 
 const update = async (invitationId, updateData) => {
   try {
-    Object.keys(updateData.forEach(fieldName => {
+    Object.keys(updateData).forEach(fieldName => {
       if (INVALID_UPDATE_FIELDS.includes(fieldName)) {
         delete updateData[fieldName]
       }
-    }))
+    })
 
     //
     if (updateData.boardInvitation) {
