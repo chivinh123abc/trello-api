@@ -22,6 +22,7 @@ const createNew = async (reqBody) => {
     throw error
   }
 }
+
 const update = async (cardId, reqBody, cardCoverFile, userInfo) => {
   try {
     const updateData = {
@@ -47,12 +48,16 @@ const update = async (cardId, reqBody, cardCoverFile, userInfo) => {
       }
       updatedCard = await cardModel.unshiftNewComment(cardId, commentData)
       // console.log(updatedCard)
+    } else if (updateData.incomingMemberInfo) {
+      // ADD or REMOVE members in card case
+      updatedCard = await cardModel.updateMembers(cardId, updateData.incomingMemberInfo)
     } else {
       // Cac truong hop update chung
       updatedCard = await cardModel.update(cardId, updateData)
     }
 
     return updatedCard
+
   } catch (error) {
     throw error
   }
