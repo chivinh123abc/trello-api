@@ -10,9 +10,7 @@ const Router = express.Router()
 // Router.route('/:id') =>truyen id vao route
 // /v1/boards
 Router.route('/')
-  .get(authMiddleware.isAuthorized,
-    boardController.getBoards
-  )
+  .get(authMiddleware.isAuthorized, boardController.getBoards)
   .post(authMiddleware.isAuthorized, boardValidation.createNew, boardController.createNew)
 
 Router.route('/:id')
